@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إنشاء حساب</title>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            text-align: center;
+            direction: rtl;
+            user-select: none;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            display: inline-block;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        input {
+          background-color: #F8F8F8;
+          width: 80%;
+          padding: 15px;
+          font-size: 15px;
+          border: 1px solid #ccc;
+          border-radius: 15px;
+          outline: none;
+          margin-top: 20px;
+          color: #000;
+        }
+        
+        input:focus {
+          border-color: #98741E;
+        }
+        
+        button {
+          width: 100%;
+          padding: 10px;
+          background: linear-gradient(to right, #98741E, #E3B760);
+          border: none;
+          border-radius: 15px;
+          color: #FFF;
+          font-size: 16px;
+          transition: background-color 0.3s;
+          margin-top: 30px;
+        }
+        
+        
+        a {
+            color: #98741E;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* تصميم النافذة المنبثقة */
+        .popup {
+          display: none;
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.6);
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+        
+        .popup-content {
+          background-color: #F8F8F8;
+          border-radius: 25px;
+          padding: 30px;
+          text-align: center;
+          width: 80%;
+          max-width: 400px;
+          position: relative;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+          color: #000;
+        }
+        
+        .close-btn {
+          position: absolute;
+          top: 10px;
+          right: 15px;
+          font-size: 24px;
+          color: #000;
+        }
+        
+        h2 {
+          color: #000
+        }
+        
+        .popup button {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 15px;
+          background: linear-gradient(to right, #98741E, #98741E, #E3B760);
+          color: white;
+          font-size: 16px;
+          margin-top: 15px;
+        }
+        
+        p {
+          color: #000;
+        }
+
+  .google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background-color: #E3B760; /* اللون الأزرق الخاص بجوجل */
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+
+  .google-btn:hover {
+    background-color: #98741E; /* تغيير اللون عند التمرير */
+  }
+
+  .google-btn img {
+    margin-right: 10px; /* مسافة بين الأيقونة والنص */
+    width: 30px;
+    height: 30px;
+  }
+  
+  .google-btn span {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>إنشاء حساب</h2>
+        <input type="text" id="name" placeholder="أدخل اسمك" required>
+        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني" required>
+        <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+        <button onclick="signUp()">إنشاء حساب</button>
+<button class="google-btn" onclick="signInWithGoogle()">
+  <img src="https://img.icons8.com/color/999/google-logo.png" alt="Google Icon" style="width: 30px; height: 30px; margin-left: 10px;"/>
+  <span>انشاء حساب عبر Google</span>
+</button>
+        <p>لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
+    </div>
+    
+
+    <!-- نافذة منبثقة -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">×</span>
+            <p id="popup-message">رسالة منبثقة</p>
+            <button onclick="closePopup()">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+// إعداد Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCd4kBTwhKeJCeuJiaErE0RHX2m8ZpmRtc",
+    authDomain: "smart-pay-6a9b8.firebaseapp.com",
+    projectId: "smart-pay-6a9b8",
+    storageBucket: "smart-pay-6a9b8.appspot.com",
+    messagingSenderId: "9418007073",
+    appId: "1:9418007073:web:0f981978bfd2d8cd263960"
+};
+
+// تهيئة Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// دالة لفتح النافذة المنبثقة
+function openPopup(message) {
+    document.getElementById('popup-message').innerText = message;
+    document.getElementById('popup').style.display = 'flex';
+}
+
+// دالة لإغلاق النافذة المنبثقة
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+// دالة لإنشاء معرف فريد
+function generateUniqueId() {
+    let uniqueId = 'P11'; // يبدأ بـ 11
+    for (let i = 0; i < 8; i++) {
+        uniqueId += Math.floor(Math.random() * 10); // إضافة 8 أرقام عشوائية
+    }
+    return uniqueId;
+}
+
+// دالة لتوليد كود إحالة عشوائي
+function generateReferralCode() {
+    let code = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    for (let i = 0; i < 7; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return code;
+}
+
+// دالة لإنشاء حساب
+function signUp() {
+    const nameField = document.getElementById("name");
+    const emailField = document.getElementById("email");
+    const passwordField = document.getElementById("password");
+    
+    const name = nameField.value;
+    const email = emailField.value;
+    const password = passwordField.value;
+
+    // إعادة تعيين الألوان وإزالة الرسائل السابقة
+    nameField.style.borderColor = '';
+    emailField.style.borderColor = '';
+    passwordField.style.borderColor = '';
+    openPopup(""); // إغلاق النافذة المنبثقة في حال كانت مفتوحة
+
+    // التأكد من ملء الحقول
+    if (!name) {
+        nameField.style.borderColor = 'red';
+        openPopup("يجب إدخال اسم.");
+        return;
+    }
+
+    if (!email) {
+        emailField.style.borderColor = 'red';
+        openPopup("يجب إدخال بريد إلكتروني.");
+        return;
+    }
+
+    if (!password) {
+        passwordField.style.borderColor = 'red';
+        openPopup("يجب إدخال كلمة المرور.");
+        return;
+    }
+
+    // التحقق من أن كلمة المرور تحتوي على أحرف وأرقام
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/; // يجب أن تحتوي على 6 أحرف على الأقل مع أحرف وأرقام
+    if (!passwordRegex.test(password)) {
+        passwordField.style.borderColor = 'red';
+        openPopup("يجب أن تتكون كلمة المرور من 6 أحرف على الأقل، تشمل أرقام وأحرف إنجليزية.");
+        return;
+    }
+
+    // التحقق من وجود البريد الإلكتروني المدخل
+    firebase.auth().fetchSignInMethodsForEmail(email)
+        .then((methods) => {
+            if (methods.length > 0) {
+                emailField.style.borderColor = 'red';
+                openPopup("هذا البريد الإلكتروني مستخدم بالفعل. الرجاء استخدام بريد إلكتروني آخر.");
+            } else {
+                const uniqueId = generateUniqueId(); // توليد المعرف الفريد
+                const referralCode = generateReferralCode(); // توليد كود الإحالة
+
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+
+                        // حفظ البيانات في Firestore
+                        db.collection("users").doc(user.uid).set({
+                            name: name,
+                            email: email,
+                            uniqueId: uniqueId, // حفظ المعرف الفريد
+                            referralCode: referralCode, // حفظ كود الإحالة
+                            balance: 0, // تخصيص قيمة الرصيد المبدئي
+                            verified: false // إضافة حقل التحقق المبدئي
+                        })
+                        .then(() => {
+                            openPopup("تم إنشاء الحساب وتخزين المعلومات بنجاح!");
+                            setTimeout(() => {
+                                window.location.href = "home.html"; // تحويل المستخدم إلى صفحة تسجيل الدخول
+                            }, 2000);
+                        })
+                        .catch((error) => {
+                            openPopup("حدث خطأ في تخزين المعلومات: " + error.message);
+                        });
+                    })
+                    .catch((error) => {
+                        openPopup("خطأ: " + error.message);
+                    });
+            }
+        })
+        .catch((error) => {
+            openPopup("خطأ: " + error.message);
+        });
+}
+
+// دالة تسجيل الدخول باستخدام Google
+function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+
+            // التحقق من وجود المستخدم مسبقًا في قاعدة البيانات
+            db.collection("users").doc(user.uid).get()
+                .then((doc) => {
+                    if (!doc.exists) {
+                        // إذا لم يكن موجودًا، يتم إنشاء سجل جديد
+                        const uniqueId = generateUniqueId(); // توليد معرف فريد
+                        const referralCode = generateReferralCode(); // كود الإحالة
+
+                        db.collection("users").doc(user.uid).set({
+                            name: user.displayName || "بدون اسم",
+                            email: user.email,
+                            uniqueId: uniqueId,
+                            referralCode: referralCode,
+                            balance: 0,
+                            verified: true // المستخدم مسجل عبر Google يعتبر موثوقًا تلقائيًا
+                        }).then(() => {
+                            openPopup("تم التسجيل بنجاح عبر Google!");
+                            setTimeout(() => {
+                                window.location.href = "home.html";
+                            }, 2000);
+                        });
+                    } else {
+                        openPopup("تم تسجيل الدخول بنجاح عبر Google!");
+                        setTimeout(() => {
+                            window.location.href = "home.html";
+                        }, 2000);
+                    }
+                });
+        })
+        .catch((error) => {
+            openPopup("حدث خطأ أثناء تسجيل الدخول عبر Google: " + error.message);
+        });
+}
+
+    </script>
+</body>
+</html>

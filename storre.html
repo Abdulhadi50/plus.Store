@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>متجر الشحن</title>
+    <style>
+        /* إعادة تعيين التنسيق */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .container {
+    width: 100%;
+    padding: 10px;
+}
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff;
+            color: #000;
+            min-height: 100vh;
+            overflow-y: auto;
+            user-select: none;
+        }
+
+        /* الرأس */
+        .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: linear-gradient(to right, #1F1F1F, #1F1F1F);
+    color: #fff;
+    border-bottom-left-radius: 25px;  /* الزاوية السفلى اليسرى */
+    border-bottom-right-radius: 25px; /* الزاوية السفلى اليمنى */
+}
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header img {
+            width: 120px;
+            height: 60px;
+            border-radius: 0%;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-icons img {
+            width: 30px;
+            height: 30px;
+            
+        }
+
+.balance-container {
+    text-align: center;
+    background-color: #F8F8F8;
+    padding: 2px;
+    border-radius: 20px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    
+}
+
+.balance-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* مسافة بين الصورة والنص */
+}
+
+.balance-title h3 {
+    font-size: 18px;
+    color: #000;
+    margin: 0;
+}
+
+.turkey-flag {
+    width: 28px; /* حجم الصورة */
+    height: 28px;
+    border-radius: 50%; /* جعل الصورة دائرية */
+    margin-bottom: 5px;
+}
+
+.balance-container .balance {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #000;
+}
+
+.balance-container .currency {
+    font-size: 16px;
+    color: #666;
+}
+
+        /* تصميم الشبكة */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 5px;
+            margin-top: 10px
+        }
+
+        .grid-item {
+            background-color: #f6f6f6;
+            border-radius: 25px;
+            text-align: center;
+            padding: 5px;
+            
+            transition: transform 0.3s ease;
+            
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+        }
+
+        .grid-item p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #000;
+        }
+
+        .slider-container {
+            width: 100%;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            margin-top: 20px
+        }
+
+        .slider-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .box-container {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 10px;
+        }
+
+        .box {
+            width: 100%;
+            height: 10%;
+            background-color: #F8F8F8;
+            border-radius: 20px;
+            border: 0.5px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+        }
+
+        .box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- الرأس -->
+    <div class="header">
+        <div class="logo">
+            <img src="https://up6.cc/2024/11/1732464452260310.png">
+        </div>
+        <div class="header-icons">
+            <img src="https://img.icons8.com/ios-filled/999/ffffff/user.png" onclick="location.href='go:profile'">
+            <img src="https://img.icons8.com/ios-glyphs/999/ffffff/menu.png" onclick="location.href='go:menu'">
+        </div>
+    </div>
+<div class="container">
+<div class="balance-container">
+        <div class="balance-title">
+          <img src="https://img.icons8.com/fluency/999/turkey-circular.png" alt="علم تركيا" class="turkey-flag">
+          <h3>رصيدك بالليرة التركية</h3></div>
+        <div class="balance" id="balance">TL 0.00</div>
+        <div class="currency">الرصيد المتاح</div>
+      </div>
+
+    <div class="slider-container">
+        <div class="box-container">
+            <div class="box" onclick="window.location.href='go:store'">
+                <img src="https://up6.cc/2024/11/173247025435751.jpg">
+            </div>
+            <div class="box" onclick="window.location.href='go:verified'">
+                <img src="https://up6.cc/2024/11/173247025435751.jpg">
+            </div>
+        </div>
+    </div>
+
+    <!-- الشبكة -->
+    <div class="grid-container">
+        <div class="grid-item" onclick="location.href='go:pubg'">
+            <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A1%D9%A9%D9%A3%D9%A2%D9%A0%D9%A1.jpg?alt=media&token=0289174a-bb16-4d17-b0e2-3c01f40cdce9">
+            <p>ببجي موبايل</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:freefire'">
+            <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A1%D9%A9%D9%A3%D9%A7%D9%A0%D9%A2.jpg?alt=media&token=0cbbec1a-e132-4f02-a970-eaaa2232735d">
+            <p>فري فاير</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Ahlan'">
+            <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A0%D9%A4%D9%A7%D9%A1%D9%A2.jpg?alt=media&token=fb282aac-d9c7-4659-acd3-ff9015beb101">
+            <p>Ahlan</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Yooy'">
+          <img src="https://up6.cc/2024/11/173245387272811.jpg">
+          <p>Yooy Chat</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245387274962.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245430036171.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Yooy'">
+          <img src="https://up6.cc/2024/11/173245387272811.jpg">
+          <p>Yooy Chat</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245387274962.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245430036171.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Yooy'">
+          <img src="https://up6.cc/2024/11/173245387272811.jpg">
+          <p>Yooy Chat</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245387274962.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245430036171.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Yooy'">
+          <img src="https://up6.cc/2024/11/173245387272811.jpg">
+          <p>Yooy Chat</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245387274962.jpg">
+          <p>Taka Live</p>
+        </div>
+        <div class="grid-item" onclick="location.href='go:Taka'">
+          <img src="https://up6.cc/2024/11/173245430036171.jpg">
+          <p>Taka Live</p>
+        </div>
+    </div>
+    
+    <p>جميع الحقوق محفوظة © 2024 بلس ستور</p>
+            
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd4kBTwhKeJCeuJiaErE0RHX2m8ZpmRtc",
+            authDomain: "smart-pay-6a9b8.firebaseapp.com",
+            projectId: "smart-pay-6a9b8",
+            storageBucket: "smart-pay-6a9b8.appspot.com",
+            messagingSenderId: "9418007073",
+            appId: "1:9418007073:web:0f981978bfd2d8cd263960"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        const auth = firebase.auth();
+        const firestore = firebase.firestore();
+        const balanceElement = document.getElementById('balance');
+
+        // تحقق من حالة تسجيل الدخول
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // إذا كان المستخدم مسجلاً
+                const userId = user.uid;
+                console.log("مستخدم مسجل الدخول: " + userId);
+                
+                // جلب الرصيد من Firestore
+                firestore.collection('users').doc(userId).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            const balance = userData.balance || 0;  // افترض أن الرصيد في حقل "balance"
+                            balanceElement.textContent = `الرصيد: TL ${balance.toFixed(2)}`;
+                        } else {
+                            console.log("لا يوجد مستند للمستخدم في قاعدة البيانات.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("خطأ في جلب البيانات: ", error);
+                    });
+
+            } else {
+                // إذا لم يكن المستخدم مسجلاً
+                console.log("لم يقم المستخدم بتسجيل الدخول");
+                // إعادة التوجيه إلى صفحة تسجيل الدخول
+                window.location.href = 'go:login';
+            }
+        });
+    </script>
+</body>
+</html>

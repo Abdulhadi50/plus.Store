@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>تسجيل الدخول</title>
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      text-align: center;
+      direction: rtl;
+      user-select: none;
+    }
+    .container {
+      margin-top: 50px;
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+      width: 90%;
+      max-width: 350px;
+    }
+    input {
+      background-color: #F8F8F8;
+      width: 80%;
+      padding: 15px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      outline: none;
+      margin-top: 20px;
+      color: #000;
+    }
+    
+    input:focus {
+      border-color: #98741E;
+    }
+    
+    button {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(to right, #98741E, #E3B760);
+      border: none;
+      border-radius: 15px;
+      color: #fff;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      margin-top: 30px;
+    }
+    
+    .forgot-password {
+      color: #98741E;
+    }
+    a {
+      color: #98741E;
+      text-decoration: none;
+    }
+    
+    /* تصميم النافذة المنبثقة */
+    .popup {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .popup-content {
+      background-color: #F8F8F8;
+      border-radius: 25px;
+      padding: 30px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      color: #000;
+    }
+    
+    h2 {
+      color: #000
+    }
+
+    .popup button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 15px;
+      background: linear-gradient(to right, #98741E, #98741E, #E3B760);
+      color: white;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+   
+    p {
+      color: #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+    <input type="password" id="password" placeholder="أدخل كلمة المرور">
+    <button onclick="login()">تسجيل الدخول</button>
+    <button onclick="loginWithGoogle()">تسجيل الدخول باستخدام Google</button>
+    <p><span class="forgot-password" onclick="resetPassword()">نسيت كلمة المرور؟</span></p>
+    <p>ليس لديك حساب؟ <a href="signup.html">إنشاء حساب</a></p>
+  </div>
+
+  <!-- نافذة منبثقة -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">×</span>
+      <p id="popup-message">رسالة منبثقة</p>
+      <button onclick="closePopup()">إغلاق</button>
+    </div>
+  </div>
+
+  <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCd4kBTwhKeJCeuJiaErE0RHX2m8ZpmRtc",
+      authDomain: "smart-pay-6a9b8.firebaseapp.com",
+      projectId: "smart-pay-6a9b8",
+      storageBucket: "smart-pay-6a9b8.appspot.com",
+      messagingSenderId: "9418007073",
+      appId: "1:9418007073:web:0f981978bfd2d8cd263960"
+    };
+
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // التحقق من حالة تسجيل الدخول
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // إذا كان المستخدم مسجلاً، يتم توجيهه إلى الصفحة الرئيسية
+            window.location.href = "index.html"; // أو أي صفحة ترغب في توجيه المستخدم إليها
+        }
+    });
+
+    // دالة لفتح النافذة المنبثقة
+    function openPopup(message) {
+      document.getElementById('popup-message').innerText = message;
+      document.getElementById('popup').style.display = 'flex';
+    }
+
+    // دالة لإغلاق النافذة المنبثقة
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    // دالة تسجيل الدخول
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          openPopup("تم تسجيل الدخول بنجاح!");
+          setTimeout(() => {
+            window.location.href = "index.html"; // توجيه المستخدم بعد تسجيل الدخول
+          }, 500);
+        })
+        .catch((error) => {
+          openPopup("خطأ: " + error.message);
+        });
+    }
+
+    // دالة إعادة تعيين كلمة المرور
+    function resetPassword() {
+      const email = document.getElementById("email").value;
+      if (email) {
+        firebase.auth().sendPasswordResetEmail(email)
+          .then(() => {
+            openPopup("تم إرسال بريد إلكتروني لإعادة تعيين كلمة المرور.");
+          })
+          .catch((error) => {
+            openPopup("خطأ: " + error.message);
+          });
+      } else {
+        openPopup("يرجى إدخال البريد الإلكتروني لإعادة تعيين كلمة المرور.");
+      }
+    }
+
+    // دالة تسجيل الدخول باستخدام Google
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          openPopup("تم تسجيل الدخول بنجاح باستخدام Google!");
+          setTimeout(() => {
+            window.location.href = "index.html"; // توجيه المستخدم بعد تسجيل الدخول
+          }, 500);
+        })
+        .catch((error) => {
+          openPopup("خطأ: " + error.message);
+        });
+    }
+  </script>
+</body>
