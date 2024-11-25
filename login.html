@@ -152,7 +152,7 @@
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // إذا كان المستخدم مسجلاً، يتم توجيهه إلى الصفحة الرئيسية
-            window.location.href = "index.html"; // أو أي صفحة ترغب في توجيه المستخدم إليها
+            window.location.href = "home.html"; // أو أي صفحة ترغب في توجيه المستخدم إليها
         }
     });
 
@@ -175,7 +175,7 @@
         .then((userCredential) => {
           openPopup("تم تسجيل الدخول بنجاح!");
           setTimeout(() => {
-            window.location.href = "index.html"; // توجيه المستخدم بعد تسجيل الدخول
+            window.location.href = "home.html"; // توجيه المستخدم بعد تسجيل الدخول
           }, 500);
         })
         .catch((error) => {
@@ -206,7 +206,7 @@
         .then((result) => {
           openPopup("تم تسجيل الدخول بنجاح باستخدام Google!");
           setTimeout(() => {
-            window.location.href = "index.html"; // توجيه المستخدم بعد تسجيل الدخول
+            window.location.href = "home.html"; // توجيه المستخدم بعد تسجيل الدخول
           }, 500);
         })
         .catch((error) => {
