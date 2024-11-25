@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Plus Store</title>
+    <title>متجر الشحن</title>
     <style>
         /* إعادة تعيين التنسيق */
         * {
@@ -182,6 +182,51 @@
             object-fit: cover;
             border-radius: 20px;
         }
+        
+         .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #F8F8F8;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            transition: background 0.3s;
+            width: 55px;
+            height: 55px;
+        }
+        
+        button img {
+          width: 30px;
+            height: 30px;
+        }
+        
+        .button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+}
+
+.button-title {
+    margin-top: 5px;
+    color: #000;
+    font-size: 14px;
+}
+
+.section-title {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.section-title h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
 
     </style>
 </head>
@@ -206,6 +251,27 @@
         <div class="currency">الرصيد المتاح</div>
       </div>
 
+<div class="button-container">
+  <div class="button-wrapper">
+    <button id="worldButton" onclick="location.href='track.html'">
+      <img src="https://img.icons8.com/material-rounded/999/purchase-order.png">
+    </button>
+    <p class="button-title">تتبع الطلب</p>
+  </div>
+  <div class="button-wrapper">
+    <button id="withdrawButton1" onclick="location.href='deposit.html'">
+      <img src="https://img.icons8.com/fluency-systems-filled/999/add-money.png">
+    </button>
+    <p class="button-title">إضافة الأموال</p>
+  </div>
+  <div class="button-wrapper">
+    <button id="withdrawButton2" onclick="location.href='withdraw.html'">
+      <img src="https://img.icons8.com/fluency-systems-filled/999/money-bag-lira.png">
+    </button>
+    <p class="button-title">سحب الأموال</p>
+  </div>
+</div>
+
     <div class="slider-container">
         <div class="box-container">
             <div class="box" onclick="window.location.href='store.html'">
@@ -217,69 +283,44 @@
         </div>
     </div>
 
+<div class="section-title">
+  <h3>الالعاب</h3>
+</div>
+
     <!-- الشبكة -->
     <div class="grid-container">
-        <div class="grid-item" onclick="location.href='go:pubg'">
+        <div class="grid-item" onclick="location.href='pubg.html'">
             <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A1%D9%A9%D9%A3%D9%A2%D9%A0%D9%A1.jpg?alt=media&token=0289174a-bb16-4d17-b0e2-3c01f40cdce9">
             <p>ببجي موبايل</p>
         </div>
-        <div class="grid-item" onclick="location.href='go:freefire'">
+        <div class="grid-item" onclick="location.href='freefire.html'">
             <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A1%D9%A9%D9%A3%D9%A7%D9%A0%D9%A2.jpg?alt=media&token=0cbbec1a-e132-4f02-a970-eaaa2232735d">
             <p>فري فاير</p>
         </div>
-        <div class="grid-item" onclick="location.href='go:Ahlan'">
+        <div class="grid-item" onclick="location.href='ahlan.html'">
             <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A0%D9%A4%D9%A7%D9%A1%D9%A2.jpg?alt=media&token=fb282aac-d9c7-4659-acd3-ff9015beb101">
             <p>Ahlan</p>
         </div>
-        <div class="grid-item" onclick="location.href='go:Yooy'">
-          <img src="https://up6.cc/2024/11/173245387272811.jpg">
-          <p>Yooy Chat</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245387274962.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245430036171.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Yooy'">
-          <img src="https://up6.cc/2024/11/173245387272811.jpg">
-          <p>Yooy Chat</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245387274962.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245430036171.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Yooy'">
-          <img src="https://up6.cc/2024/11/173245387272811.jpg">
-          <p>Yooy Chat</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245387274962.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245430036171.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Yooy'">
-          <img src="https://up6.cc/2024/11/173245387272811.jpg">
-          <p>Yooy Chat</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245387274962.jpg">
-          <p>Taka Live</p>
-        </div>
-        <div class="grid-item" onclick="location.href='go:Taka'">
-          <img src="https://up6.cc/2024/11/173245430036171.jpg">
-          <p>Taka Live</p>
-        </div>
     </div>
+    
+    <div class="section-title">
+      <h3>التطبيقات</h3>
+    </div>
+    
+    <div class="grid-container">
+        <div class="grid-item" onclick="location.href='pubg.html'">
+          <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A1%D9%A9%D9%A3%D9%A2%D9%A0%D9%A1.jpg?alt=media&token=0289174a-bb16-4d17-b0e2-3c01f40cdce9">
+          <p>ببجي موبايل</p>
+        </div>
+        <div class="grid-item" onclick="location.href='freefire.html'">
+          <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A1%D9%A9%D9%A3%D9%A7%D9%A0%D9%A2.jpg?alt=media&token=0cbbec1a-e132-4f02-a970-eaaa2232735d">
+          <p>فري فاير</p>
+        </div>
+        <div class="grid-item" onclick="location.href='ahlan.html'">
+          <img src="https://firebasestorage.googleapis.com/v0/b/smart-pay-6a9b8.appspot.com/o/%D9%A2%D9%A0%D9%A2%D9%A4%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A0%D9%A4%D9%A7%D9%A1%D9%A2.jpg?alt=media&token=fb282aac-d9c7-4659-acd3-ff9015beb101">
+          <p>Ahlan</p>
+        </div>
+     </div>
     
     <p>جميع الحقوق محفوظة © 2024 بلس ستور</p>
             
