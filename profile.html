@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الملف الشخصي</title>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-firestore.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .profile-container {
+            background-color: #ffffff;
+            width: 360px;
+            padding: 20px;
+            
+            animation: fadeIn 0.5s ease;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-header h2 {
+            font-size: 22px;
+            color: #333333;
+            font-weight: bold;
+        }
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .profile-item:hover {
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .profile-item label {
+            font-size: 14px;
+            color: #555;
+        }
+        .profile-item span {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .profile-item img {
+            width: 18px;
+            height: 18px;
+            
+        }
+        .button {
+            display: block;
+            width: 100%;
+            background-color: #98741E;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #98741E;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
+        }
+        .popup-content h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .popup-content p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .popup-content button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #98741E;
+            color: white;
+            font-size: 14px;
+            
+            transition: background-color 0.3s;
+        }
+        .popup-content button:hover {
+            background-color: #98741E;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-container">
+    <!-- Header -->
+    <div class="profile-header">
+        <h2 id="username">اسم المستخدم</h2>
+    </div>
+
+    <!-- User Info -->
+    <div class="profile-item">
+        <label>معرف المستخدم</label>
+        <div>
+            <span id="uniqueId">UID</span>
+            <img src="https://img.icons8.com/ios-glyphs/999/000/copy.png" onclick="copyToClipboard()" />
+        </div>
+    </div>
+    <div class="profile-item">
+        <label>البريد الإلكتروني</label>
+        <span id="email">user@example.com</span>
+    </div>
+
+    <!-- Logout Button -->
+    <button class="button" onclick="logout()">تسجيل الخروج</button>
+</div>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h3>رسالة</h3>
+        <p id="popupMessage">تم نسخ UID إلى الحافظة!</p>
+        <button onclick="closePopup()">موافق</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCd4kBTwhKeJCeuJiaErE0RHX2m8ZpmRtc",
+        authDomain: "smart-pay-6a9b8.firebaseapp.com",
+        projectId: "smart-pay-6a9b8",
+        storageBucket: "smart-pay-6a9b8.appspot.com",
+        messagingSenderId: "9418007073",
+        appId: "1:9418007073:web:0f981978bfd2d8cd263960"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            const uid = user.uid;
+            db.collection("users").doc(uid).get().then(doc => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById("username").innerText = data.name || "اسم المستخدم";
+                    document.getElementById("uniqueId").innerText = data.uniqueId || uid;
+                    document.getElementById("email").innerText = user.email || "غير متوفر";
+                } else {
+                    console.error("Document does not exist!");
+                }
+            }).catch(console.error);
+        } else {
+            window.location.href = "go:login";
+        }
+    });
+
+    function copyToClipboard() {
+        const uniqueId = document.getElementById("uniqueId").innerText;
+        navigator.clipboard.writeText(uniqueId).then(() => {
+            showPopup("تم نسخ UID إلى الحافظة!");
+        }).catch(console.error);
+    }
+
+    function logout() {
+        auth.signOut().then(() => {
+            window.location.href = "go:login";
+        }).catch(console.error);
+    }
+
+    function showPopup(message) {
+        document.getElementById("popupMessage").innerText = message;
+        document.getElementById("popup").style.display = "flex";
+    }
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
